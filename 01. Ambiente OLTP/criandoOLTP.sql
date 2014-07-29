@@ -27,15 +27,14 @@ CREATE TABLE TB_PAGAMENTO(
 	idPagamento int primary key identity(1,1) not null,
 	valor numeric(15,2) not null,
 	tipo char not null check(tipo in ('D', 'C')),
-	data date default (cast(getdate() as date))
+	data date default (cast(getdate() as date)),
+	idOrdemServico int foreign key references TB_ORDEM_SERVICO
 )
 
 CREATE TABLE TB_CARRO(
 	idCarro int primary key identity(1,1) not null,
-	nome varchar(45) not null,
+	modelo varchar(45) not null,
 	marca varchar(45) not null,
-	placa varchar(45) not null,
-	documento varchar(45) not null
 )
 
 CREATE TABLE TB_SERVICO(
@@ -52,22 +51,41 @@ CREATE TABLE TB_FORNECEDOR(
 )
 
 CREATE TABLE TB_PECA(
-	idPeca int primary key identity(1,1) not null,
+	idPeca int identity(1,1) not null,
 	nome varchar(45) not null,
 	valor numeric(15,2) not null,
-	idFornecedor int foreign key references TB_FORNECEDOR
+	idFornecedor int not null,
+	primary key(idPeca, idFornecedor),
+	CONSTRAINT fk_TB_PECA_TB_FORNECEDOR
+    FOREIGN KEY (idFornecedor)
+    REFERENCES TB_FORNECEDOR (idFornecedor)
 )
 
 CREATE TABLE TB_ORDEM_SERVICO(
-	idOrdemServico int primary key identity(1,1) not null,
+	idOrdemServico int identity(1,1) not null,
 	valorTotal numeric(15,2) not null,
 	dataCriacao datetime default(getdate()),
 	dataFinalizacao datetime null,
-	idCarro int foreign key references TB_CARRO,
-	idPagamento int foreign key references TB_PAGAMENTO,
-	idCliente int foreign key references TB_CLIENTE,
-	idFuncionario int foreign key references TB_FUNCIONARIO,
-	idServico int foreign key references TB_SERVICO,
-	idPeca int foreign key references TB_PECA,
-	idFornecedor int foreign key references TB_FORNECEDOR
+	idCarro int not null,
+	idCliente int not null,
+	idFuncionario int not null,
+	idServico int not null,
+	idPeca int not null,
+	idFornecedor int not null,
+	primary key (idOrdemServico),
+	CONSTRAINT fk_ORDEM_SERVICO_TB_CARRO
+    FOREIGN KEY (idCarro)
+    REFERENCES TB_CARRO (idCarro),
+    CONSTRAINT fk_ORDEM_SERVICO_TB_CLIENTE
+    FOREIGN KEY (idCliente)
+    REFERENCES TB_CLIENTE (idCliente),
+    CONSTRAINT fk_ORDEM_SERVICO_TB_FUNCIONARIO
+    FOREIGN KEY (idFuncionario)
+    REFERENCES TB_FUNCIONARIO (idFuncionario),
+    CONSTRAINT fk_ORDEM_SERVICO_TB_SERVICO
+    FOREIGN KEY (idServico)
+    REFERENCES TB_SERVICO (idServico),
+    CONSTRAINT fk_ORDEM_SERVICO_TB_PECA
+    FOREIGN KEY(idPeca, idFornecedor )
+    REFERENCES TB_PECA(idPeca, idFornecedor)
 )
