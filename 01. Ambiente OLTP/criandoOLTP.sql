@@ -23,14 +23,6 @@ CREATE TABLE TB_FUNCIONARIO(
 	salario numeric(15,2) not null
 )
 
-CREATE TABLE TB_PAGAMENTO(
-	idPagamento int primary key identity(1,1) not null,
-	valor numeric(15,2) not null,
-	tipo char not null check(tipo in ('D', 'C')),
-	data date default (cast(getdate() as date)),
-	idOrdemServico int foreign key references TB_ORDEM_SERVICO
-)
-
 CREATE TABLE TB_CARRO(
 	idCarro int primary key identity(1,1) not null,
 	modelo varchar(45) not null,
@@ -88,4 +80,12 @@ CREATE TABLE TB_ORDEM_SERVICO(
     CONSTRAINT fk_ORDEM_SERVICO_TB_PECA
     FOREIGN KEY(idPeca, idFornecedor )
     REFERENCES TB_PECA(idPeca, idFornecedor)
+)
+
+CREATE TABLE TB_PAGAMENTO(
+	idPagamento int primary key identity(1,1) not null,
+	valor numeric(15,2) not null,
+	tipo char not null check(tipo in ('D', 'C')),
+	data date default (cast(getdate() as date)),
+	idOrdemServico int foreign key references TB_ORDEM_SERVICO
 )
