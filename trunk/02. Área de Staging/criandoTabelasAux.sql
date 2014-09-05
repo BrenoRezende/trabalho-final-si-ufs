@@ -1,3 +1,6 @@
+CREATE DATABASE LOCAL_AUXILIAR
+USE LOCAL_AUXILIAR
+
 CREATE TABLE TB_AUX_CLIENTE(
 	idCliente int primary key identity(1,1) not null,
 	nome varchar(60) not null,
@@ -26,9 +29,10 @@ CREATE TABLE TB_AUX_PAGAMENTO(
 	idPagamento int primary key identity(1,1) not null,
 	valor numeric(15,2) not null,
 	tipo char not null check(tipo in ('D', 'C')),
+	tada_carga datetime not null,
 	data date default (cast(getdate() as date)),
-	idOrdemServico int foreign key references TB_ORDEM_SERVICO,
-	tada_carga datetime not null	
+	idOrdemServico int foreign key references TB_AUX_ORDEM_SERVICO
+		
 )
 
 CREATE TABLE TB_AUX_CARRO(
@@ -60,9 +64,9 @@ CREATE TABLE TB_AUX_PECA(
 	idFornecedor int not null,
 	tada_carga datetime not null,	
 	primary key(idPeca, idFornecedor),
-	CONSTRAINT fk_TB_PECA_TB_FORNECEDOR
+	CONSTRAINT fk_TB_AUX_PECA_TB_AUX_FORNECEDOR
     FOREIGN KEY (idFornecedor)
-    REFERENCES TB_FORNECEDOR (idFornecedor)
+    REFERENCES TB_AUX_FORNECEDOR (idFornecedor)
     
 )
 
@@ -79,19 +83,24 @@ CREATE TABLE TB_AUX_ORDEM_SERVICO(
 	idFornecedor int not null,
 	tada_carga datetime not null,	
 	primary key (idOrdemServico),
-	CONSTRAINT fk_ORDEM_SERVICO_TB_CARRO
+	
+	CONSTRAINT fk_AUX_ORDEM_SERVICO_TB_AUX_CARRO
     FOREIGN KEY (idCarro)
-    REFERENCES TB_CARRO (idCarro),
-    CONSTRAINT fk_ORDEM_SERVICO_TB_CLIENTE
+    REFERENCES TB_AUX_CARRO (idCarro),
+    
+    CONSTRAINT fk_AUX_ORDEM_SERVICO_TB_AUX_CLIENTE
     FOREIGN KEY (idCliente)
-    REFERENCES TB_CLIENTE (idCliente),
-    CONSTRAINT fk_ORDEM_SERVICO_TB_FUNCIONARIO
+    REFERENCES TB_AUX_CLIENTE (idCliente),
+    
+    CONSTRAINT fk_AUX_ORDEM_SERVICO_TB_AUX_FUNCIONARIO
     FOREIGN KEY (idFuncionario)
-    REFERENCES TB_FUNCIONARIO (idFuncionario),
-    CONSTRAINT fk_ORDEM_SERVICO_TB_SERVICO
+    REFERENCES TB_AUX_FUNCIONARIO (idFuncionario),
+    
+    CONSTRAINT fk_AUX_ORDEM_SERVICO_TB_AUX_SERVICO
     FOREIGN KEY (idServico)
-    REFERENCES TB_SERVICO (idServico),
-    CONSTRAINT fk_ORDEM_SERVICO_TB_PECA
+    REFERENCES TB_AUX_SERVICO (idServico),
+    
+    CONSTRAINT fk_AUX_ORDEM_SERVICO_TB_AUX_PECA
     FOREIGN KEY(idPeca, idFornecedor )
-    REFERENCES TB_PECA(idPeca, idFornecedor)
+    REFERENCES TB_AUX_PECA(idPeca, idFornecedor)
 )
