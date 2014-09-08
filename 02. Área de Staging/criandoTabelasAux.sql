@@ -29,7 +29,7 @@ CREATE TABLE TB_AUX_PAGAMENTO(
 	data_carga datetime not null,
 	idPagamento int not null,
 	valor numeric(15,2) not null,
-	tipo char not null ,	
+	tipo varchar(45) not null ,	
 	data date,
 	idOrdemServico int 		
 )
