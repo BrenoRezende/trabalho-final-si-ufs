@@ -85,7 +85,7 @@ CREATE TABLE TB_ORDEM_SERVICO(
 CREATE TABLE TB_PAGAMENTO(
 	idPagamento int primary key identity(1,1) not null,
 	valor numeric(15,2) not null,
-	tipo char not null check(tipo in ('D', 'C')),
+	tipo VARCHAR(45) NOT NULL CHECK(tipo_pagamento IN ('A VISTA','A PRAZO')),
 	data date default (cast(getdate() as date)),
 	idOrdemServico int foreign key references TB_ORDEM_SERVICO
 )
