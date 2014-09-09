@@ -56,7 +56,7 @@ CREATE TABLE TB_PECA(
 CREATE TABLE TB_ORDEM_SERVICO(
 	idOrdemServico int identity(1,1) not null,
 	valorTotal numeric(15,2) not null,
-	dataCriacao datetime default(getdate()),
+	dataCriacao datetime default(CAST (getdate() as DATE)),
 	dataFinalizacao datetime null,
 	idCarro int not null,
 	idCliente int not null,
