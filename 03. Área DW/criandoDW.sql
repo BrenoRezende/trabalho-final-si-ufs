@@ -13,8 +13,6 @@ CREATE TABLE DIM_Tempo(
 	Dia SMALLINT NULL,
 	DiaSemana VARCHAR(25) NULL,
 	DiaUtil CHAR(3) NULL,
-	Feriado CHAR(3) NULL,
-	TipoFeriado VARCHAR(50) NULL DEFAULT('NÃO É FERIADO'),
 	FimSemana CHAR(3) NULL,
 	Quinzena SMALLINT NULL,
 	

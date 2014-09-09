@@ -156,7 +156,7 @@ AS
 		DECLARE @ROWCOUNT INT
 		
 		UPDATE TB_ORDEM_SERVICO
-		SET dataFinalizacao = getdate()
+		SET dataFinalizacao = (SELECT CAST (getdate() as DATE))
 		WHERE idOrdemServico = @ID
 		
 		SELECT @ROWCOUNT = @@ROWCOUNT
