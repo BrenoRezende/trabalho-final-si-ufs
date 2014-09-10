@@ -129,16 +129,16 @@ CREATE TABLE FATO_ORDEM_SERVICO(
 	cod_ordem_servico INT NOT NULL,
 	quantidade INT NOT NULL DEFAULT(1),
 	valorTotal NUMERIC(15,2) NOT NULL,
-	tipo_pagamento VARCHAR(45) NOT NULL CHECK(tipo_pagamento IN ('A VISTA','A PRAZO')),
+	tipo_pagamento VARCHAR(45) NULL CHECK(tipo_pagamento IN ('A VISTA','A PRAZO')),
 	id_carro INT NOT NULL,
 	id_fornecedor INT NOT NULL,
-	id_peca INT NOT NULL,
-	id_servico INT NOT NULL,
+	id_peca INT NULL,
+	id_servico INT NULL,
 	id_cliente INT NOT NULL,
 	id_funcionario INT NOT NULL,
 	id_tempo_criacao INT NOT NULL,
 	id_tempo_finalizacao INT NOT NULL,
-	id_tempo_pagamento INT NOT NULL,
+	id_tempo_pagamento INT NULL,
 	
 	PRIMARY KEY (id_ordem_servico),
 	CONSTRAINT fk_ORDEM_SERVICO_DIM_CARRO
@@ -170,3 +170,20 @@ CREATE TABLE FATO_ORDEM_SERVICO(
     REFERENCES DIM_Tempo (id_tempo)
 )
 
+-- -----------------------------------------------------
+-- AGREGAGO_ORDEM_SERVICO_POR_QUINZENA
+--------------------------------------------------------
+
+CREATE TABLE AGREGADO_ORDENS_SERVICO_CRIADA_POR_DIA(
+	id_ordens_por_DIA INT IDENTITY(1,1) NOT NULL,
+	quantidade INT NOT NULL,
+	id_ordem_servico INT NOT NULL,
+	id_tempo INT NOT NULL,
+	PRIMARY KEY(id_ordens_por_dia),
+	CONSTRAINT fk_ORDENS_SERVICO_DIA
+	FOREIGN KEY (id_ordem_servico)
+	REFERENCES FATO_ORDEM_SERVICO (id_ordem_servico),
+	CONSTRAINT fk_ORDENS_SERVICO_DIA_TEMPO
+	FOREIGN KEY (id_tempo)
+	REFERENCES DIM_Tempo (id_tempo),
+)
