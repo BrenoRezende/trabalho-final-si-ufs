@@ -74,7 +74,7 @@ CREATE TABLE TB_AUX_ORDEM_SERVICO(
 	idCarro int not null,
 	idCliente int not null,
 	idFuncionario int not null,
-	idServico int not null,
-	idPeca int not null,
+	idServico int null,
+	idPeca int null,
 	idFornecedor int not null	
 )

@@ -61,8 +61,8 @@ CREATE TABLE TB_ORDEM_SERVICO(
 	idCarro int not null,
 	idCliente int not null,
 	idFuncionario int not null,
-	idServico int not null,
-	idPeca int not null,
+	idServico int null,
+	idPeca int null,
 	idFornecedor int not null,
 	primary key (idOrdemServico),
 	CONSTRAINT fk_ORDEM_SERVICO_TB_CARRO
@@ -87,5 +87,7 @@ CREATE TABLE TB_PAGAMENTO(
 	valor numeric(15,2) not null,
 	tipo VARCHAR(45) NOT NULL CHECK(tipo IN ('A VISTA','A PRAZO')),
 	data date default (cast(getdate() as date)),
-	idOrdemServico int foreign key references TB_ORDEM_SERVICO
+	idOrdemServico int foreign key references TB_ORDEM_SERVICO unique
 )
+
+
