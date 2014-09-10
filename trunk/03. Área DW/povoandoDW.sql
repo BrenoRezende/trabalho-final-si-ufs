@@ -487,6 +487,25 @@ AS
 		DEALLOCATE C_FUNCIONARIO
 	END
 	
+-----------------------------------------------------------------------------------------------
+---- CARGA AGREGADO_ORDENS_SERVICO_CRIADA_POR_DIA
+-----------------------------------------------------------------------------------------------
+alter PROCEDURE SP_CARGA_AGREGADO_ORDENS_POR_DIA(@ID_ORDEM_SERVICO INT)
+AS
+	BEGIN
+		DECLARE @ID_TEMPO INT, @AUX INT
+		
+		SET @ID_TEMPO = (SELECT id_tempo_criacao FROM FATO_ORDEM_SERVICO WHERE id_ordem_servico = @ID_ORDEM_SERVICO)
+		
+		SET @AUX = (SELECT COUNT(quantidade) FROM AGREGADO_ORDENS_SERVICO_CRIADA_POR_DIA WHERE id_ordem_servico = @ID_ORDEM_SERVICO)
+		
+		IF (@AUX = 0)
+		BEGIN		
+			INSERT INTO AGREGADO_ORDENS_SERVICO_CRIADA_POR_DIA(quantidade, id_ordem_servico, id_tempo)
+			VALUES (1, @ID_ORDEM_SERVICO, @ID_TEMPO)
+		END
+	
+	END
 	
 -----------------------------------------------------------------------------------------------
 ---- CARGA FATO_ORDEM_SERVICO
@@ -557,35 +576,7 @@ AS
 		DEALLOCATE C_ORDEM_SERVICO
 	END
 
------------------------------------------------------------------------------------------------
----- CARGA AGREGADO_ORDENS_SERVICO_CRIADA_POR_DIA
------------------------------------------------------------------------------------------------
-CREATE PROCEDURE SP_CARGA_AGREGADO_ORDENS_POR_DIA(@ID_ORDEM_SERVICO INT)
-AS
-	BEGIN
-		DECLARE @QUANTIDADE INT, @ID_TEMPO INT, @AUX INT
-		
-		SET @ID_TEMPO = (SELECT id_tempo_criacao FROM FATO_ORDEM_SERVICO WHERE id_ordem_servico = @ID_ORDEM_SERVICO)
-		SET @QUANTIDADE = (SELECT SUM(quantidade) FROM FATO_ORDEM_SERVICO WHERE id_tempo_criacao = @ID_TEMPO)
-		
-		SET @AUX = (SELECT COUNT(quantidade) FROM AGREGADO_ORDENS_SERVICO_CRIADA_POR_DIA WHERE id_ordem_servico = @ID_ORDEM_SERVICO)
-		
-		IF (@AUX = 0)
-		BEGIN
-			SET @ID_TEMPO = (SELECT id_tempo_criacao FROM FATO_ORDEM_SERVICO WHERE id_ordem_servico = @ID_ORDEM_SERVICO)
-			SET @QUANTIDADE = (SELECT SUM(quantidade) FROM FATO_ORDEM_SERVICO WHERE id_tempo_criacao = @ID_TEMPO)
-			
-			INSERT INTO AGREGADO_ORDENS_SERVICO_CRIADA_POR_DIA(quantidade, id_ordem_servico, id_tempo)
-			VALUES (@QUANTIDADE, @ID_ORDEM_SERVICO, @ID_TEMPO)
-		END
-		ELSE
-		BEGIN
-			UPDATE AGREGADO_ORDENS_SERVICO_CRIADA_POR_DIA
-			SET quantidade = @QUANTIDADE
-			WHERE id_ordem_servico = @ID_ORDEM_SERVICO
-		END
-		
-	END
+
 
 -----------------------------------------------------------------------------------------------
 	
@@ -614,4 +605,5 @@ EXEC SP_CARGA_ORDEM_SERVICO '2014-09-09'
 SELECT * FROM FATO_ORDEM_SERVICO
 
 SELECT * FROM AGREGADO_ORDENS_SERVICO_CRIADA_POR_DIA
+truncate table AGREGADO_ORDENS_SERVICO_CRIADA_POR_DIA
 

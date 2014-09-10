@@ -137,7 +137,7 @@ CREATE TABLE FATO_ORDEM_SERVICO(
 	id_cliente INT NOT NULL,
 	id_funcionario INT NOT NULL,
 	id_tempo_criacao INT NOT NULL,
-	id_tempo_finalizacao INT NOT NULL,
+	id_tempo_finalizacao INT NULL,
 	id_tempo_pagamento INT NULL,
 	
 	PRIMARY KEY (id_ordem_servico),
